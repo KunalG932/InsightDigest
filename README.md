@@ -1,82 +1,95 @@
 # InsightDigest - AI-Powered News Platform
 
-InsightDigest is a modern news platform that uses AI to provide concise summaries of news articles, making it easier to stay informed about global events.
+<div align="center">
+  <img src="public/og-image.png" alt="InsightDigest Banner" width="800"/>
+  <p align="center">
+    <strong>Stay informed with AI-powered news summaries</strong>
+  </p>
+</div>
 
-## Features
+## 🚀 Features
 
-- 🤖 AI-powered article summaries
-- 📱 Progressive Web App (PWA) support
-- 🌐 Multiple news categories
-- 🎯 Real-time updates
-- 📊 Clean, modern UI
-- 🔄 Responsive design
-- 📲 Easy installation on any device
-- 🔗 Social sharing capabilities
+- 🤖 **AI-Powered Summaries**: Get concise, accurate summaries of news articles
+- 📱 **PWA Support**: Install as a native app on any device
+- 🌐 **Multiple Categories**: Browse news across various topics
+- 🔄 **Real-time Updates**: Stay current with the latest news
+- 🎨 **Modern UI/UX**: Clean, responsive design with smooth animations
+- 🌙 **Dark Mode**: Easy on the eyes, perfect for night reading
+- 🔗 **Social Sharing**: Share articles and summaries easily
+- 📊 **Smart Layout**: Optimized for both mobile and desktop
 
-## Getting Started
+## 🛠️ Tech Stack
 
-First, clone the repository:
+- **Frontend**: Next.js 14, React 18, TypeScript
+- **Styling**: Tailwind CSS, Framer Motion
+- **AI Integration**: Advanced Language Models
+- **PWA Features**: Offline support, installable app
+- **Performance**: Server-side rendering, optimized images
 
+## 🚀 Quick Start
+
+1. Clone the repository:
 ```bash
 git clone https://github.com/KunalG932/InsightDigest.git
 cd InsightDigest
 ```
 
-Install dependencies:
-
+2. Install dependencies:
 ```bash
 npm install
 # or
 yarn install
 ```
 
-Run the development server:
-
+3. Run the development server:
 ```bash
 npm run dev
 # or
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-## Installation
-
-InsightDigest can be installed as a Progressive Web App (PWA):
+## 📱 Installation
 
 ### Mobile Devices
-- Visit the website on your mobile browser
-- Tap the "Install App" button or use browser's "Add to Home Screen" option
+1. Visit the website on your mobile browser
+2. Tap "Install App" or use browser's "Add to Home Screen"
+3. Follow the on-screen instructions
 
 ### Desktop
-- Visit the website in Chrome/Edge
-- Click the install button in the address bar or use the navbar install button
+1. Visit the website in Chrome/Edge
+2. Click the install button in the address bar
+3. Follow the installation prompts
 
-## Technologies Used
+## 🤝 Contributing
 
-- Next.js 14
-- React 18
-- Tailwind CSS
-- Framer Motion
-- TypeScript
-- PWA capabilities
+Contributions are welcome! Please feel free to submit a Pull Request. For major changes:
 
-## Contributing
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Deploy on Vercel
+## 🚀 Deploy Your Own
 
-The easiest way to deploy your InsightDigest app is to use the [Vercel Platform](https://vercel.com).
+Deploy your own version of InsightDigest with Vercel:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FKunalG932%2FInsightDigest&project-name=insight-digest&repository-name=insight-digest&demo-title=insight-digest&demo-description=AI-Powered%20News%20Platform&demo-url=https%3A%2F%2Finsightdigest.vercel.app)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FKunalG932%2FInsightDigest&project-name=insight-digest&repository-name=InsightDigest&demo-title=InsightDigest&demo-description=AI-Powered%20News%20Platform&demo-url=https%3A%2F%2Finsightdigest.vercel.app)
 
-## Acknowledgments
+## 🙏 Acknowledgments
 
 - News data provided by [News API]
 - AI summaries powered by advanced language models
 - Icons by [Lucide Icons](https://lucide.dev)
+- Design inspiration from modern news platforms
+
+## 📬 Contact
+
+- GitHub: [@KunalG932](https://github.com/KunalG932)
+- Project Link: [https://github.com/KunalG932/InsightDigest](https://github.com/KunalG932/InsightDigest)

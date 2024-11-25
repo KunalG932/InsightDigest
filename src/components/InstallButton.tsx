@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Download, DeviceMobile, Laptop, Chrome, Safari } from 'lucide-react';
+import { Download, Smartphone, Laptop, Chrome, Safari } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function InstallButton() {
@@ -89,7 +89,7 @@ export default function InstallButton() {
               <h3 className="text-white font-medium mb-2">Available on:</h3>
               <div className="space-y-2">
                 <div className="flex items-center gap-2 text-slate-300">
-                  <DeviceMobile className="w-4 h-4" />
+                  <Smartphone className="w-4 h-4" />
                   <span>Mobile devices</span>
                 </div>
                 <div className="flex items-center gap-2 text-slate-300">
@@ -124,9 +124,9 @@ export default function InstallButton() {
                 <div className="space-y-4">
                   <p className="text-slate-300">To install on iOS:</p>
                   <ol className="list-decimal list-inside space-y-2 text-slate-300">
-                    <li>Tap the Share button in Safari</li>
-                    <li>Scroll down and tap "Add to Home Screen"</li>
-                    <li>Tap "Add" to confirm</li>
+                    <li>Tap the &quot;Share&quot; button in Safari</li>
+                    <li>Scroll down and tap &quot;Add to Home Screen&quot;</li>
+                    <li>Tap &quot;Add&quot; to confirm</li>
                   </ol>
                 </div>
               ) : isMobile ? (

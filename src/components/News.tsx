@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import ShareButton from './ShareButton';
+import Image from 'next/image';
 
 interface newsProps {
   newsType: string;
@@ -72,11 +73,13 @@ export function NewsComponent({ newsType, newsData }: newsProps) {
     >
       <div className="relative group">
         <div className="aspect-video overflow-hidden">
-          <img
-            alt={item.title}
-            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+          <Image
             src={item.imageUrl}
-            loading="lazy"
+            alt={item.title}
+            width={800}
+            height={400}
+            className="w-full h-48 object-cover rounded-t-2xl"
+            priority={index < 3}
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>

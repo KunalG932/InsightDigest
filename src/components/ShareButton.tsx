@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { Share2, Check, Copy, Twitter, Facebook, WhatsApp, Link as LinkIcon } from 'lucide-react';
+import { Share2, Check, Copy, Twitter, Facebook, MessageCircle, Link as LinkIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ShareButtonProps {
@@ -25,7 +25,7 @@ export default function ShareButton({ title, summary, url }: ShareButtonProps) {
         window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
         break;
       case 'whatsapp':
-        window.open(`https://wa.me/?text=${encodeURIComponent(shareText + ' ' + url)}`, '_blank');
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + url)}`, '_blank');
         break;
       case 'copy':
         try {
@@ -97,7 +97,7 @@ export default function ShareButton({ title, summary, url }: ShareButtonProps) {
                   onClick={() => handleShare('whatsapp')}
                   className="flex items-center gap-2 w-full p-2 rounded hover:bg-slate-700 text-left text-slate-300 hover:text-cyan-400 transition-colors"
                 >
-                  <WhatsApp size={18} />
+                  <MessageCircle size={18} />
                   <span>Share on WhatsApp</span>
                 </button>
                 <button

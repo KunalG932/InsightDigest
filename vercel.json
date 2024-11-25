@@ -11,11 +11,5 @@
   ],
   "env": {
     "NEXT_PUBLIC_API_URL": "https://lexica.qewertyy.dev"
-  },
-  "eslint": {
-    "ignoreDuringBuilds": true
-  },
-  "typescript": {
-    "ignoreBuildErrors": true
   }
 } 

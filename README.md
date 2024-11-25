@@ -73,7 +73,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 The easiest way to deploy your InsightDigest app is to use the [Vercel Platform](https://vercel.com).
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FKunalG932%2FInsightDigest&project-name=insight-digest&repository-name=InsightDigest&demo-title=InsightDigest&demo-description=AI-Powered%20News%20Platform&demo-url=https%3A%2F%2Finsightdigest.vercel.app)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FKunalG932%2FInsightDigest&project-name=insight-digest&repository-name=insight-digest&demo-title=insight-digest&demo-description=AI-Powered%20News%20Platform&demo-url=https%3A%2F%2Finsightdigest.vercel.app)
 
 ## Acknowledgments
 

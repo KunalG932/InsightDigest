@@ -19,4 +19,53 @@
 
 .pull-to-refresh.pulling {
   transform: scale(0.97);
+}
+
+/* Add these styles */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer {
+  animation: shimmer 2s infinite;
+}
+
+/* Add offline indicator styles */
+.offline-indicator {
+  position: fixed;
+  bottom: env(safe-area-inset-bottom);
+  left: 0;
+  right: 0;
+  background: rgb(239, 68, 68);
+  color: white;
+  text-align: center;
+  padding: 0.5rem;
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.offline-indicator.visible {
+  transform: translateY(0);
+}
+
+/* Add pull-to-refresh visual feedback */
+.ptr-element {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  color: #fff;
+  z-index: 10;
+  text-align: center;
+  height: 50px;
+}
+
+.ptr-element .loading {
+  display: inline-block;
+  margin-right: 8px;
 } 

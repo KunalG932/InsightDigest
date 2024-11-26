@@ -3,7 +3,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import ShareButton from './ShareButton';
 import Image from 'next/image';
-import { Share2, Bookmark, BookmarkCheck } from 'lucide-react';
+import { Share2, Bookmark, BookmarkCheck, Wifi, WifiOff, AlertCircle } from 'lucide-react';
 
 interface newsProps {
   newsType: string;
@@ -47,6 +47,73 @@ const swipeAnimation = {
     transition: { duration: 0.3 }
   }
 };
+
+const pulseAnimation = {
+  animate: {
+    scale: [1, 1.05, 1],
+    opacity: [0.8, 1, 0.8],
+    transition: {
+      duration: 2,
+      repeat: Infinity,
+      ease: "easeInOut"
+    }
+  }
+};
+
+// Add new NetworkStatus component
+function NetworkStatus() {
+  const [isOnline, setIsOnline] = useState(true);
+  const [showStatus, setShowStatus] = useState(false);
+
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+      setShowStatus(true);
+      setTimeout(() => setShowStatus(false), 3000);
+    };
+    const handleOffline = () => {
+      setIsOnline(false);
+      setShowStatus(true);
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  if (!showStatus) return null;
+
+  return (
+    <motion.div
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: -100, opacity: 0 }}
+      className="fixed top-0 left-0 right-0 z-50"
+    >
+      <div className={`flex items-center justify-center p-4 ${
+        isOnline ? 'bg-green-500/90' : 'bg-red-500/90'
+      } backdrop-blur-sm text-white`}>
+        <div className="flex items-center gap-2">
+          {isOnline ? (
+            <>
+              <Wifi className="w-5 h-5" />
+              <span>Back Online</span>
+            </>
+          ) : (
+            <>
+              <WifiOff className="w-5 h-5" />
+              <span>You are offline</span>
+            </>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
 export function NewsComponent({ newsType, newsData }: newsProps) {
   const [summaries, setSummaries] = useState<{[key: string]: string}>({});
@@ -255,6 +322,7 @@ export function NewsComponent({ newsType, newsData }: newsProps) {
       exit="exit"
       className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 py-12"
     >
+      <NetworkStatus />
       <div className="container mx-auto px-4">
         <motion.header 
           variants={fadeInUp}
@@ -288,7 +356,11 @@ export function NewsLoading() {
       className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 py-12"
     >
       <div className="container mx-auto px-4">
-        <div className="animate-pulse space-y-16">
+        <motion.div 
+          variants={pulseAnimation}
+          animate="animate"
+          className="animate-pulse space-y-16"
+        >
           <div className="text-center space-y-4">
             <div className="h-12 w-64 bg-slate-800 rounded-lg mx-auto"></div>
             <div className="h-4 w-32 bg-slate-800 rounded mx-auto"></div>
@@ -296,8 +368,24 @@ export function NewsLoading() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-slate-800 rounded-2xl overflow-hidden">
-                <div className="h-48 bg-slate-700"></div>
+              <motion.div
+                key={i}
+                variants={fadeInUp}
+                className="bg-slate-800 rounded-2xl overflow-hidden"
+              >
+                <div className="aspect-video bg-slate-700 relative overflow-hidden">
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-slate-800/0 via-slate-800/50 to-slate-800/0"
+                    animate={{
+                      x: ['-100%', '100%'],
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                  />
+                </div>
                 <div className="p-6 space-y-4">
                   <div className="space-y-2">
                     <div className="h-6 bg-slate-700 rounded w-3/4"></div>
@@ -309,10 +397,45 @@ export function NewsLoading() {
                     <div className="h-4 bg-slate-700 rounded w-5/6"></div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
+      </div>
+    </motion.div>
+  );
+}
+
+export function NewsError({ message }: { message: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="min-h-[50vh] flex items-center justify-center"
+    >
+      <div className="text-center space-y-4">
+        <motion.div
+          animate={{
+            rotate: [0, 10, -10, 0],
+          }}
+          transition={{
+            duration: 1,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+        >
+          <AlertCircle className="w-16 h-16 text-red-500 mx-auto" />
+        </motion.div>
+        <h3 className="text-xl font-bold text-slate-200">{message}</h3>
+        <p className="text-slate-400">Please try again later</p>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => window.location.reload()}
+          className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg"
+        >
+          Retry
+        </motion.button>
       </div>
     </motion.div>
   );

@@ -46,23 +46,38 @@ const staggerContainer = {
 };
 
 const cardHover = {
-  rest: { scale: 1, y: 0 },
-  hover: { 
-    scale: 1.02,
-    y: -5,
+  rest: {
+    scale: 1,
     transition: {
       duration: 0.2,
+      type: "tween",
+      ease: "easeIn"
+    }
+  },
+  hover: {
+    scale: 1.02,
+    transition: {
+      duration: 0.2,
+      type: "tween",
       ease: "easeOut"
     }
   }
 };
 
 const imageHover = {
-  rest: { scale: 1 },
-  hover: { 
+  rest: {
+    scale: 1,
+    transition: {
+      duration: 0.2,
+      type: "tween",
+      ease: "easeIn"
+    }
+  },
+  hover: {
     scale: 1.05,
     transition: {
-      duration: 0.4,
+      duration: 0.2,
+      type: "tween",
       ease: "easeOut"
     }
   }
@@ -84,36 +99,19 @@ const swipeAnimation = {
 
 // Add these new animation variants at the top
 const pageTransition = {
-  initial: { 
-    opacity: 0,
-    y: 20,
-    scale: 0.98
-  },
-  animate: { 
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.4,
-      ease: [0.4, 0, 0.2, 1]
-    }
-  },
-  exit: { 
-    opacity: 0,
-    y: -20,
-    transition: {
-      duration: 0.3
-    }
-  }
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+  transition: { duration: 0.3 }
 };
 
 const shimmer = {
   animate: {
     backgroundPosition: ["200% 0", "-200% 0"],
     transition: {
-      duration: 2,
-      ease: "linear",
-      repeat: Infinity
+      duration: 3,
+      repeat: Infinity,
+      ease: "linear"
     }
   }
 };
@@ -341,7 +339,7 @@ export function NewsComponent({ newsType, newsData }: newsProps) {
       initial="initial"
       animate="animate"
       exit="exit"
-      variants={scaleUp}
+      variants={pageTransition}
       className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 py-12"
     >
       <div className="container mx-auto px-4">

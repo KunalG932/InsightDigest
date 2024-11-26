@@ -1,11 +1,12 @@
 "use client";
 import { NewsComponent, NewsLoading, NewsNavigation } from "@/components/News";
 import { getCategories, getNewsByCategory } from "@/lib/fetchNews";
-import { usePathname, notFound } from "next/navigation";
+import { usePathname, notFound, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function News() {
+  const router = useRouter();
   const [categories, setCategories] = useState<string[] | undefined>([]);
   const [category, setCategory] = useState<string>("");
   const [loading, setLoading] = useState(true);
@@ -39,19 +40,27 @@ export default function News() {
   }, []);
 
   useEffect(() => {
-    const [newCategory, newPageNo] = [
-      pathname.split("/")[1],
-      pathname.split("/")[2],
-    ];
-    setCategory(newCategory.charAt(0).toUpperCase() + newCategory.slice(1));
-    setPageNo(parseInt(newPageNo || "1"));
-  }, [pathname]);
+    const category = pathname.split("/")[1];
+    if (!category) {
+      router.push('/');
+      return;
+    }
+    
+    const formattedCategory = category.charAt(0).toUpperCase() + category.slice(1);
+    if (categories && !categories.includes(formattedCategory)) {
+      router.push('/not-found');
+      return;
+    }
+    
+    setCategory(formattedCategory);
+    router.push(`/${category}/1`);
+  }, [pathname, router, categories]);
 
   useEffect(() => {
-    if (category !== "") {
+    if (category && pageNo) {
       fetchNews();
     }
-  }, [category]);
+  }, [category, pageNo]);
 
   if (loading || categories === undefined) {
     return <NewsLoading />;

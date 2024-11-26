@@ -1,11 +1,12 @@
 "use client";
 import { NewsComponent, NewsLoading, NewsNavigation } from "@/components/News";
 import { getCategories, getNewsByCategory } from "@/lib/fetchNews";
-import { usePathname, notFound } from "next/navigation";
+import { usePathname, notFound, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 export default function News() {
+  const router = useRouter();
   const [categories, setCategories] = useState<string[] | undefined>([]);
   const [category, setCategory] = useState<string>("");
   const [pageNo, setPageNo] = useState<number>(1);
@@ -22,13 +23,26 @@ export default function News() {
   };
   const pathname = usePathname();
   useEffect(() => {
-    const [newCategory, newPageNo] = [
-      pathname.split("/")[1],
-      pathname.split("/")[2],
-    ];
-    setCategory(newCategory.charAt(0).toUpperCase() + newCategory.slice(1));
-    setPageNo(parseInt(newPageNo || "1"));
-  }, [pathname]);
+    const [newCategory, newPageNo] = pathname.split("/").filter(Boolean);
+    if (!newCategory || !newPageNo) {
+      router.push('/');
+      return;
+    }
+    
+    const formattedCategory = newCategory.charAt(0).toUpperCase() + newCategory.slice(1);
+    if (categories && !categories.includes(formattedCategory)) {
+      router.push('/not-found');
+      return;
+    }
+    
+    setCategory(formattedCategory);
+    const page = parseInt(newPageNo);
+    if (isNaN(page) || page < 1) {
+      router.push(`/${newCategory}/1`);
+      return;
+    }
+    setPageNo(page);
+  }, [pathname, router, categories]);
 
   const fetchNews = async () => {
     try {
@@ -46,10 +60,10 @@ export default function News() {
   }, []);
 
   useEffect(() => {
-    if (category !== "") {
+    if (category && pageNo) {
       fetchNews();
     }
-  }, [category]);
+  }, [category, pageNo]);
 
   if (loading || categories === undefined) {
     return <NewsLoading />;

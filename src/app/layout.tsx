@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'InsightDigest - Smart News Summaries',
     description: 'Get AI-powered insights on the latest news',
-    images: ['/og-image.png'],
+    images: ['public/image.png'],
   },
 }
 

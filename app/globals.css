@@ -1,0 +1,22 @@
+/* Add safe area padding for mobile devices */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Improve touch targets on mobile */
+@media (max-width: 768px) {
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Add pull-to-refresh animation styles */
+.pull-to-refresh {
+  transform-origin: top;
+  transition: transform 0.2s;
+}
+
+.pull-to-refresh.pulling {
+  transform: scale(0.97);
+} 

@@ -1,7 +1,7 @@
 {
   "name": "InsightDigest",
   "short_name": "InsightDigest",
-  "description": "Your Daily News Companion with AI-powered summaries",
+  "description": "Your Daily News Companion with AI-powered summaries.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#020617",

@@ -3,7 +3,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import ShareButton from './ShareButton';
 import Image from 'next/image';
-import { Share2, Bookmark, BookmarkCheck, Wifi, WifiOff, AlertCircle } from 'lucide-react';
+import { Share2, Bookmark, BookmarkCheck } from 'lucide-react';
 
 interface newsProps {
   newsType: string;
@@ -23,13 +23,47 @@ interface newsProps {
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -20 }
+  exit: { opacity: 0, y: -20 },
+  transition: { duration: 0.3 }
+};
+
+const scaleUp = {
+  initial: { scale: 0.95, opacity: 0 },
+  animate: { scale: 1, opacity: 1 },
+  exit: { scale: 0.95, opacity: 0 },
+  transition: { duration: 0.3 }
 };
 
 const staggerContainer = {
+  initial: { opacity: 0 },
   animate: {
+    opacity: 1,
     transition: {
-      staggerChildren: 0.1
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const cardHover = {
+  rest: { scale: 1, y: 0 },
+  hover: { 
+    scale: 1.02,
+    y: -5,
+    transition: {
+      duration: 0.2,
+      ease: "easeOut"
+    }
+  }
+};
+
+const imageHover = {
+  rest: { scale: 1 },
+  hover: { 
+    scale: 1.05,
+    transition: {
+      duration: 0.4,
+      ease: "easeOut"
     }
   }
 };
@@ -48,72 +82,41 @@ const swipeAnimation = {
   }
 };
 
-const pulseAnimation = {
-  animate: {
-    scale: [1, 1.05, 1],
-    opacity: [0.8, 1, 0.8],
+// Add these new animation variants at the top
+const pageTransition = {
+  initial: { 
+    opacity: 0,
+    y: 20,
+    scale: 0.98
+  },
+  animate: { 
+    opacity: 1,
+    y: 0,
+    scale: 1,
     transition: {
-      duration: 2,
-      repeat: Infinity,
-      ease: "easeInOut"
+      duration: 0.4,
+      ease: [0.4, 0, 0.2, 1]
+    }
+  },
+  exit: { 
+    opacity: 0,
+    y: -20,
+    transition: {
+      duration: 0.3
     }
   }
 };
 
-// Add new NetworkStatus component
-function NetworkStatus() {
-  const [isOnline, setIsOnline] = useState(true);
-  const [showStatus, setShowStatus] = useState(false);
-
-  useEffect(() => {
-    const handleOnline = () => {
-      setIsOnline(true);
-      setShowStatus(true);
-      setTimeout(() => setShowStatus(false), 3000);
-    };
-    const handleOffline = () => {
-      setIsOnline(false);
-      setShowStatus(true);
-    };
-
-    window.addEventListener('online', handleOnline);
-    window.addEventListener('offline', handleOffline);
-    
-    return () => {
-      window.removeEventListener('online', handleOnline);
-      window.removeEventListener('offline', handleOffline);
-    };
-  }, []);
-
-  if (!showStatus) return null;
-
-  return (
-    <motion.div
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      exit={{ y: -100, opacity: 0 }}
-      className="fixed top-0 left-0 right-0 z-50"
-    >
-      <div className={`flex items-center justify-center p-4 ${
-        isOnline ? 'bg-green-500/90' : 'bg-red-500/90'
-      } backdrop-blur-sm text-white`}>
-        <div className="flex items-center gap-2">
-          {isOnline ? (
-            <>
-              <Wifi className="w-5 h-5" />
-              <span>Back Online</span>
-            </>
-          ) : (
-            <>
-              <WifiOff className="w-5 h-5" />
-              <span>You are offline</span>
-            </>
-          )}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
+const shimmer = {
+  animate: {
+    backgroundPosition: ["200% 0", "-200% 0"],
+    transition: {
+      duration: 2,
+      ease: "linear",
+      repeat: Infinity
+    }
+  }
+};
 
 export function NewsComponent({ newsType, newsData }: newsProps) {
   const [summaries, setSummaries] = useState<{[key: string]: string}>({});
@@ -181,34 +184,52 @@ export function NewsComponent({ newsType, newsData }: newsProps) {
   const items = newsData.map((item, index) => (
     <motion.article
       variants={fadeInUp}
+      initial="rest"
+      whileHover="hover"
+      animate="rest"
+      variants={cardHover}
       key={item.newsId}
       className="bg-gradient-to-br from-slate-900 to-slate-800 hover:from-slate-800 hover:to-slate-700 
                  shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl overflow-hidden"
     >
       <div className="relative group">
-        <div className="aspect-video">
+        <motion.div 
+          className="aspect-video"
+          variants={imageHover}
+        >
           <Image
             src={item.imageUrl}
             alt={item.title}
             width={800}
             height={400}
-            className="w-full h-full object-cover rounded-t-2xl"
+            className="w-full h-full object-cover rounded-t-2xl transition-transform duration-300"
             priority={index < 3}
           />
-        </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"/>
-        {/* Add mobile-friendly touch overlay */}
+        </motion.div>
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"
+          initial={{ opacity: 0 }}
+          whileHover={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+        />
         <div className="absolute top-4 right-4 flex gap-2">
           <motion.button
+            whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => toggleSaveArticle(item.newsId)}
             className="p-2 rounded-full bg-slate-900/80 backdrop-blur-sm text-white hover:bg-slate-800"
           >
-            {savedArticles[item.newsId] ? (
-              <BookmarkCheck className="w-5 h-5 text-cyan-400" />
-            ) : (
-              <Bookmark className="w-5 h-5" />
-            )}
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              {savedArticles[item.newsId] ? (
+                <BookmarkCheck className="w-5 h-5 text-cyan-400" />
+              ) : (
+                <Bookmark className="w-5 h-5" />
+              )}
+            </motion.div>
           </motion.button>
         </div>
       </div>
@@ -320,19 +341,36 @@ export function NewsComponent({ newsType, newsData }: newsProps) {
       initial="initial"
       animate="animate"
       exit="exit"
+      variants={scaleUp}
       className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 py-12"
     >
-      <NetworkStatus />
       <div className="container mx-auto px-4">
         <motion.header 
           variants={fadeInUp}
           className="text-center mb-16 space-y-4"
         >
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text">
+          <motion.h1 
+            className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 text-transparent bg-clip-text"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.4 }}
+          >
             InsightDigest
-          </h1>
-          <p className="text-slate-400 text-lg">{newsType}</p>
-          <div className="w-32 h-1 mx-auto rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"></div>
+          </motion.h1>
+          <motion.p 
+            className="text-slate-400 text-lg"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.3, duration: 0.4 }}
+          >
+            {newsType}
+          </motion.p>
+          <motion.div 
+            className="w-32 h-1 mx-auto rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
+            initial={{ width: 0 }}
+            animate={{ width: 128 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+          />
         </motion.header>
 
         <motion.div 
@@ -346,96 +384,80 @@ export function NewsComponent({ newsType, newsData }: newsProps) {
   );
 }
 
+// Update NewsLoading component for better loading states
 export function NewsLoading() {
   return (
     <motion.div
       initial="initial"
       animate="animate"
       exit="exit"
-      variants={fadeInUp}
+      variants={pageTransition}
       className="min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 py-12"
     >
       <div className="container mx-auto px-4">
-        <motion.div 
-          variants={pulseAnimation}
-          animate="animate"
-          className="animate-pulse space-y-16"
-        >
+        <div className="space-y-16">
           <div className="text-center space-y-4">
-            <div className="h-12 w-64 bg-slate-800 rounded-lg mx-auto"></div>
-            <div className="h-4 w-32 bg-slate-800 rounded mx-auto"></div>
+            <motion.div 
+              variants={shimmer}
+              animate="animate"
+              className="h-12 w-64 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 rounded-lg mx-auto"
+              style={{ backgroundSize: "200% 100%" }}
+            />
+            <motion.div 
+              variants={shimmer}
+              animate="animate"
+              className="h-4 w-32 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 rounded mx-auto"
+              style={{ backgroundSize: "200% 100%" }}
+            />
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <motion.div 
+            variants={staggerContainer}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
             {Array.from({ length: 6 }).map((_, i) => (
               <motion.div
                 key={i}
                 variants={fadeInUp}
                 className="bg-slate-800 rounded-2xl overflow-hidden"
               >
-                <div className="aspect-video bg-slate-700 relative overflow-hidden">
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-slate-800/0 via-slate-800/50 to-slate-800/0"
-                    animate={{
-                      x: ['-100%', '100%'],
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      ease: "linear"
-                    }}
-                  />
-                </div>
+                <motion.div 
+                  variants={shimmer}
+                  animate="animate"
+                  className="h-48 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800"
+                  style={{ backgroundSize: "200% 100%" }}
+                />
                 <div className="p-6 space-y-4">
                   <div className="space-y-2">
-                    <div className="h-6 bg-slate-700 rounded w-3/4"></div>
-                    <div className="h-4 bg-slate-700 rounded w-1/2"></div>
+                    <motion.div 
+                      variants={shimmer}
+                      animate="animate"
+                      className="h-6 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 rounded w-3/4"
+                      style={{ backgroundSize: "200% 100%" }}
+                    />
+                    <motion.div 
+                      variants={shimmer}
+                      animate="animate"
+                      className="h-4 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 rounded w-1/2"
+                      style={{ backgroundSize: "200% 100%" }}
+                    />
                   </div>
                   <div className="space-y-2">
-                    <div className="h-4 bg-slate-700 rounded"></div>
-                    <div className="h-4 bg-slate-700 rounded"></div>
-                    <div className="h-4 bg-slate-700 rounded w-5/6"></div>
+                    {[1, 2, 3].map((_, idx) => (
+                      <motion.div 
+                        key={idx}
+                        variants={shimmer}
+                        animate="animate"
+                        className="h-4 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 rounded"
+                        style={{ backgroundSize: "200% 100%" }}
+                      />
+                    ))}
                   </div>
                 </div>
               </motion.div>
             ))}
-          </div>
-        </motion.div>
-      </div>
-    </motion.div>
-  );
-}
-
-export function NewsError({ message }: { message: string }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="min-h-[50vh] flex items-center justify-center"
-    >
-      <div className="text-center space-y-4">
-        <motion.div
-          animate={{
-            rotate: [0, 10, -10, 0],
-          }}
-          transition={{
-            duration: 1,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
-        >
-          <AlertCircle className="w-16 h-16 text-red-500 mx-auto" />
-        </motion.div>
-        <h3 className="text-xl font-bold text-slate-200">{message}</h3>
-        <p className="text-slate-400">Please try again later</p>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => window.location.reload()}
-          className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg"
-        >
-          Retry
-        </motion.button>
+          </motion.div>
+        </div>
       </div>
     </motion.div>
   );

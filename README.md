@@ -89,6 +89,10 @@ Deploy your own version of InsightDigest with Vercel:
 - Icons by [Lucide Icons](https://lucide.dev)
 - Design inspiration from modern news platforms
 
+## Orignal REpo
+
+- Qewertyy's AverageNews [Repo](https://github.com/Qewertyy/AverageNews)
+
 ## 📬 Contact
 
 - GitHub: [@KunalG932](https://github.com/KunalG932)

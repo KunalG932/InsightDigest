@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "private": false,
   "scripts": {
-    "dev": "ts-node --project tsconfig.server.json server.ts",
+    "dev": "next dev",
     "build": "next build",
-    "start": "NODE_ENV=production ts-node --project tsconfig.server.json server.ts",
+    "start": "next start",
+    "scheduler": "ts-node --project tsconfig.server.json server.ts",
     "lint": "next lint"
   },
   "dependencies": {

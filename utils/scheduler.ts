@@ -34,3 +34,9 @@ export class NewsScheduler {
     }
   }
 }
+
+// Function to create and start the scheduler
+export function startScheduler() {
+    const scheduler = new NewsScheduler();
+    scheduler.start();
+}

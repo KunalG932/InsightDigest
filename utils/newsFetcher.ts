@@ -1,5 +1,5 @@
 import Parser from 'rss-parser';
-import axios from 'axios';
+import { telegramBot } from './telegramBot';
 
 type CustomFeed = { title: string; link: string; description: string };
 type CustomItem = { title: string; link: string; content: string; enclosure?: { url: string } };
@@ -34,18 +34,14 @@ export class NewsFetcher {
 
   private async sendToTelegram(item: CustomItem) {
     try {
-      const response = await axios.post('/api/sendNews', {
+      // Send directly using the telegramBot instance instead of making an HTTP request
+      await telegramBot.sendNewsUpdate({
         title: item.title,
-        summary: item.content?.substring(0, 200) + '...',
+        text: `<b>${item.title}</b>\n\n${item.content?.substring(0, 200)}...`,
         imageUrl: item.enclosure?.url,
         articleUrl: item.link,
       });
-      
-      if (response.data.status === 'duplicate') {
-        console.log(`News already sent: ${item.title}`);
-      } else {
-        console.log(`Successfully sent news: ${item.title}`);
-      }
+      console.log(`Successfully sent news: ${item.title}`);
     } catch (error) {
       console.error(`Error sending news to Telegram:`, error);
     }
@@ -59,6 +55,8 @@ export class NewsFetcher {
       
       for (const item of items) {
         await this.sendToTelegram(item);
+        // Add a small delay between messages to avoid rate limiting
+        await new Promise(resolve => setTimeout(resolve, 1000));
       }
     }
     

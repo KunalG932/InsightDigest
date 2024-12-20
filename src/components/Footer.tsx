@@ -7,6 +7,8 @@ export function Footer() {
     { name: 'Latest News', href: '/latest' },
     { name: 'Categories', href: '/categories' },
     { name: 'About', href: '/about' },
+    { name: 'Terms', href: '/terms' },
+    { name: 'Privacy', href: '/privacy' }
   ];
 
   const socialLinks = [
@@ -36,34 +38,62 @@ export function Footer() {
       animate={{ opacity: 1, y: 0 }}
       className="bg-gradient-to-b from-slate-900 to-slate-950"
     >
-      <div className="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
-        <div className="flex justify-center space-x-6 md:order-2">
-          {socialLinks.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="text-slate-400 hover:text-cyan-400 transition-colors duration-300"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span className="sr-only">{item.name}</span>
-              <item.icon className="h-6 w-6" aria-hidden="true" />
-            </Link>
-          ))}
+      <div className="mx-auto max-w-7xl px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Navigation Links */}
+          <div>
+            <h3 className="text-slate-100 font-semibold mb-4">Quick Links</h3>
+            <nav className="flex flex-col space-y-3">
+              {footerLinks.slice(0, 4).map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-slate-400 hover:text-cyan-400 transition-colors duration-300"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Legal Links */}
+          <div>
+            <h3 className="text-slate-100 font-semibold mb-4">Legal</h3>
+            <nav className="flex flex-col space-y-3">
+              {footerLinks.slice(4).map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-slate-400 hover:text-cyan-400 transition-colors duration-300"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+          </div>
+
+          {/* Social Links */}
+          <div>
+            <h3 className="text-slate-100 font-semibold mb-4">Connect With Us</h3>
+            <div className="flex space-x-4">
+              {socialLinks.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-slate-400 hover:text-cyan-400 transition-colors duration-300"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span className="sr-only">{item.name}</span>
+                  <item.icon className="h-6 w-6" aria-hidden="true" />
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="mt-8 md:order-1 md:mt-0">
-          <nav className="flex justify-center space-x-6 md:justify-start">
-            {footerLinks.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-sm font-medium text-slate-400 hover:text-cyan-400 transition-colors duration-300"
-              >
-                {item.name}
-              </Link>
-            ))}
-          </nav>
-          <p className="mt-8 text-center text-xs leading-5 text-slate-400 md:text-left md:mt-4">
+
+        <div className="mt-8 pt-8 border-t border-slate-800">
+          <p className="text-center text-slate-400 text-sm">
             &copy; {new Date().getFullYear()} InsightDigest. All rights reserved.
           </p>
         </div>

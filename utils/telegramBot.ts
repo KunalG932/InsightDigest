@@ -32,14 +32,16 @@ export class TelegramBot {
 
   private createInlineKeyboard(url: string): { inline_keyboard: InlineKeyboardButton[][] } {
     return {
-      inline_keyboard: [[{ text: 'Read Full Article', url }]],
+      inline_keyboard: [[
+        { text: '🔗 Read Full Article', url },
+        { text: '🤖 AI Summary', url: `${url}#ai-summary` }
+      ]],
     };
   }
 
   async sendNewsUpdate({ text, photo, articleUrl }: SendMessageParams): Promise<void> {
     try {
       console.log('Sending news to Telegram channel:', this.channelId);
-      console.log('Message:', text);
 
       if (photo) {
         // Send photo with caption and inline keyboard
@@ -50,7 +52,7 @@ export class TelegramBot {
           parse_mode: 'HTML',
           ...(articleUrl && { reply_markup: JSON.stringify(this.createInlineKeyboard(articleUrl)) }),
         });
-        console.log('Telegram API response:', response.data);
+        console.log('Telegram API photo response:', response.data);
       } else {
         // Send text message with inline keyboard
         const response = await axios.post(`${this.baseUrl}/sendMessage`, {
@@ -59,7 +61,7 @@ export class TelegramBot {
           parse_mode: 'HTML',
           ...(articleUrl && { reply_markup: JSON.stringify(this.createInlineKeyboard(articleUrl)) }),
         });
-        console.log('Telegram API response:', response.data);
+        console.log('Telegram API message response:', response.data);
       }
     } catch (error: any) {
       console.error('Error sending message to Telegram:', error.response?.data || error.message);
@@ -67,7 +69,6 @@ export class TelegramBot {
     }
   }
 
-  // Test the bot's connection
   async testConnection(): Promise<boolean> {
     try {
       const response = await axios.get(`${this.baseUrl}/getMe`);

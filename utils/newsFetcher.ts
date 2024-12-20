@@ -1,69 +1,72 @@
+import axios from 'axios';
 import { telegramBot } from './telegramBot';
-import { lexicaApi, LexicaArticle } from './lexicaApi';
-import { newsDB } from './database';
+
+interface LexicaNewsItem {
+  title: string;
+  link: string;
+  description: string;
+  image: string;
+  source: string;
+  date: string;
+}
 
 export class NewsFetcher {
-  private formatNewsMessage(article: LexicaArticle, summary: string): string {
-    const date = new Date(article.publishedAt).toLocaleString();
+  private readonly apiUrl = 'https://lexica.qewertyy.dev/news';
+
+  private async fetchNewsFromLexica(): Promise<LexicaNewsItem[]> {
+    try {
+      console.log('Fetching news from Lexica API...');
+      const response = await axios.get(this.apiUrl);
+      return response.data.articles || [];
+    } catch (error) {
+      console.error('Error fetching from Lexica API:', error);
+      return [];
+    }
+  }
+
+  private formatNewsMessage(item: LexicaNewsItem): string {
+    const date = new Date(item.date).toLocaleString();
     return `
-📰 <b>${article.title}</b>
+📰 <b>${item.title}</b>
 
-${summary}
+${item.description}
 
+📍 Source: ${item.source}
 📅 ${date}
-🔍 Source: ${article.source}
 `;
   }
 
-  private async sendToTelegram(article: LexicaArticle, summary: string) {
+  private async sendToTelegram(item: LexicaNewsItem) {
     try {
-      if (newsDB.isNewsSent(article.url)) {
-        console.log(`News already sent: ${article.title}`);
-        return;
-      }
-
-      const message = this.formatNewsMessage(article, summary);
+      const message = this.formatNewsMessage(item);
       await telegramBot.sendNewsUpdate({
         text: message,
-        photo: article.imageUrl,
-        articleUrl: article.url,
+        photo: item.image,
+        articleUrl: item.link,
       });
-
-      // Mark as sent in database
-      newsDB.markNewsAsSent(article.url, article.title);
-      
-      console.log(`Successfully sent news: ${article.title}`);
+      console.log(`Successfully sent news: ${item.title}`);
       
       // Add delay between messages to avoid rate limiting
       await new Promise(resolve => setTimeout(resolve, 2000));
     } catch (error) {
-      console.error(`Error sending news to Telegram:`, error);
+      console.error('Error sending news to Telegram:', error);
     }
   }
 
   public async checkAndSendNews() {
+    console.log('Starting news check...');
+    
     try {
-      console.log('Starting news check from Lexica API...');
+      const newsItems = await this.fetchNewsFromLexica();
+      console.log(`Fetched ${newsItems.length} news items`);
       
-      // Fetch latest news from Lexica
-      const articles = await lexicaApi.getLatestNews();
-      
-      // Process each article
-      for (const article of articles) {
-        try {
-          // Generate AI summary
-          const summary = await lexicaApi.generateSummary(article.content);
-          
-          // Send to Telegram
-          await this.sendToTelegram(article, summary);
-        } catch (error) {
-          console.error(`Error processing article ${article.title}:`, error);
-        }
+      for (const item of newsItems) {
+        await this.sendToTelegram(item);
       }
-      
-      console.log('Finished news check');
     } catch (error) {
-      console.error('Error in checkAndSendNews:', error);
+      console.error('Error in news check:', error);
     }
+    
+    console.log('Finished news check');
   }
 }

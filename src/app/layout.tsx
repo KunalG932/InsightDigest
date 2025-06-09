@@ -49,9 +49,9 @@ export default function RootLayout({
         <meta name="theme-color" content="#0f172a" />
         <meta name="color-scheme" content="dark" />
       </head>
-      <body className={`${inter.className} bg-slate-950 text-slate-50 min-h-screen flex flex-col`}>
+      <body className={`${inter.className} bg-slate-950 text-slate-50 min-h-screen`}>
         <Navbar />
-        <main className="flex-grow">
+        <main className="pt-16">
           {children}
         </main>
         <InstallButton />

@@ -62,27 +62,27 @@ export default function Navbar() {
     <motion.nav 
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 safe-top ${
         isScrolled 
           ? 'bg-slate-950/90 backdrop-blur-lg shadow-lg' 
           : 'bg-slate-950/80 backdrop-blur-lg'
       } border-b border-slate-800`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-14 sm:h-16">
           <div className="flex items-center">
             <Link 
               href="/" 
-              className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent 
+              className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent 
                        hover:scale-105 transition-transform focus:outline-none focus:ring-2 focus:ring-cyan-500 
-                       focus:ring-offset-2 focus:ring-offset-slate-950 rounded-lg"
+                       focus:ring-offset-2 focus:ring-offset-slate-950 rounded-lg touch-target"
             >
               InsightDigest
             </Link>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-2 lg:space-x-4">
             {categories?.slice(0, 6).map((category) => (
               <motion.div
                 key={category}
@@ -91,7 +91,7 @@ export default function Navbar() {
               >
                 <Link
                   href={`/${category.toLowerCase()}`}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300
+                  className={`px-2 lg:px-3 py-2 rounded-md text-sm font-medium transition-all duration-300
                            focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 
                            focus:ring-offset-slate-950 ${
                              activeCategory === category
@@ -111,29 +111,31 @@ export default function Navbar() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleInstallClick}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 
+                className="flex items-center gap-2 px-3 lg:px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 
                          text-white font-medium hover:from-cyan-600 hover:to-blue-600 transition-all 
                          focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 
-                         focus:ring-offset-slate-950 shadow-lg hover:shadow-cyan-500/20"
+                         focus:ring-offset-slate-950 shadow-lg hover:shadow-cyan-500/20 text-sm"
               >
-                <Download size={18} />
-                Install App
+                <Download size={16} />
+                <span className="hidden lg:inline">Install App</span>
+                <span className="lg:hidden">Install</span>
               </motion.button>
             )}
           </div>
 
           {/* Mobile Navigation Button */}
-          <div className="md:hidden flex items-center gap-4">
+          <div className="md:hidden flex items-center gap-2 sm:gap-4">
             {isInstallable && (
               <motion.button
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={handleInstallClick}
                 className="p-2 rounded-md text-cyan-400 hover:bg-slate-800/50 focus:outline-none 
-                         focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+                         focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-950
+                         touch-target"
                 aria-label="Install App"
               >
-                <Download size={24} />
+                <Download size={20} />
               </motion.button>
             )}
             <motion.button
@@ -142,11 +144,11 @@ export default function Navbar() {
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 rounded-md text-slate-300 hover:text-cyan-400 hover:bg-slate-800/50 
                        focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 
-                       focus:ring-offset-slate-950"
+                       focus:ring-offset-slate-950 touch-target"
               aria-label={isOpen ? "Close menu" : "Open menu"}
               aria-expanded={isOpen}
             >
-              {isOpen ? <X size={24} /> : <Menu size={24} />}
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
             </motion.button>
           </div>
         </div>
@@ -162,7 +164,7 @@ export default function Navbar() {
             transition={{ duration: 0.2 }}
             className="md:hidden bg-slate-900/95 backdrop-blur-lg overflow-hidden"
           >
-            <div className="px-2 pt-2 pb-3 space-y-1">
+            <div className="px-2 pt-2 pb-3 space-y-1 safe-bottom">
               {categories?.slice(0, 8).map((category, index) => (
                 <motion.div
                   key={category}
@@ -176,9 +178,9 @@ export default function Navbar() {
                       setIsOpen(false);
                       setActiveCategory(category);
                     }}
-                    className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300
+                    className={`block px-3 py-3 rounded-md text-base font-medium transition-all duration-300
                              focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 
-                             focus:ring-offset-slate-950 ${
+                             focus:ring-offset-slate-950 touch-target ${
                                activeCategory === category
                                  ? 'text-cyan-400 bg-slate-800/50'
                                  : 'text-slate-300 hover:text-cyan-400 hover:bg-slate-800/50'
@@ -200,12 +202,13 @@ export default function Navbar() {
                       handleInstallClick();
                       setIsOpen(false);
                     }}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-md 
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-md 
                              bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-medium 
                              hover:from-cyan-600 hover:to-blue-600 transition-all focus:outline-none 
-                             focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+                             focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-950
+                             touch-target"
                   >
-                    <Download size={20} />
+                    <Download size={18} />
                     Install App
                   </button>
                 </motion.div>

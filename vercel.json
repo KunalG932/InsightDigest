@@ -19,12 +19,6 @@
       "dest": "/server.ts"
     }
   ],
-  "crons": [
-    {
-      "path": "/api/scheduler",
-      "schedule": "*/30 * * * *"
-    }
-  ],
   "env": {
     "NEXT_PUBLIC_API_URL": "https://lexica.qewertyy.dev"
   }

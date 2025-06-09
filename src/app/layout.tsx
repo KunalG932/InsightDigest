@@ -4,7 +4,11 @@ import './globals.css'
 import Navbar from './Navbar'
 import InstallButton from '@/components/InstallButton'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ 
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
 
 export const metadata: Metadata = {
   title: 'InsightDigest | Your Daily News Companion',
@@ -13,11 +17,19 @@ export const metadata: Metadata = {
   authors: [{ name: 'InsightDigest Team' }],
   manifest: '/manifest.json',
   themeColor: '#0f172a',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=5',
   openGraph: {
     title: 'InsightDigest - Smart News Summaries',
     description: 'Get AI-powered insights on the latest news',
     images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/icon-192x192.png',
   },
 }
 
@@ -27,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className={`dark ${inter.variable}`}>
       <head>
         <meta charSet="utf-8" />
         <link rel="icon" href="/favicon.ico" />
@@ -35,10 +47,13 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="theme-color" content="#0f172a" />
+        <meta name="color-scheme" content="dark" />
       </head>
-      <body className={`${inter.className} bg-slate-950 text-slate-50 pt-16`}>
+      <body className={`${inter.className} bg-slate-950 text-slate-50 min-h-screen flex flex-col`}>
         <Navbar />
-        {children}
+        <main className="flex-grow">
+          {children}
+        </main>
         <InstallButton />
       </body>
     </html>

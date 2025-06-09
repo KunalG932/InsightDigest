@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { telegramBot } from './telegramBot';
 
 interface LexicaNewsItem {
   title: string;
@@ -24,49 +23,15 @@ export class NewsFetcher {
     }
   }
 
-  private formatNewsMessage(item: LexicaNewsItem): string {
-    const date = new Date(item.date).toLocaleString();
-    return `
-📰 <b>${item.title}</b>
-
-${item.description}
-
-📍 Source: ${item.source}
-📅 ${date}
-`;
-  }
-
-  private async sendToTelegram(item: LexicaNewsItem) {
-    try {
-      const message = this.formatNewsMessage(item);
-      await telegramBot.sendNewsUpdate({
-        text: message,
-        photo: item.image,
-        articleUrl: item.link,
-      });
-      console.log(`Successfully sent news: ${item.title}`);
-      
-      // Add delay between messages to avoid rate limiting
-      await new Promise(resolve => setTimeout(resolve, 2000));
-    } catch (error) {
-      console.error('Error sending news to Telegram:', error);
-    }
-  }
-
-  public async checkAndSendNews() {
-    console.log('Starting news check...');
-    
+  public async getNews(): Promise<LexicaNewsItem[]> {
+    console.log('Starting news fetch...');
     try {
       const newsItems = await this.fetchNewsFromLexica();
       console.log(`Fetched ${newsItems.length} news items`);
-      
-      for (const item of newsItems) {
-        await this.sendToTelegram(item);
-      }
+      return newsItems;
     } catch (error) {
-      console.error('Error in news check:', error);
+      console.error('Error in news fetch:', error);
+      return [];
     }
-    
-    console.log('Finished news check');
   }
 }

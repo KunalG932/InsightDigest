@@ -101,7 +101,7 @@ export default function Home() {
           <NewsLoading />
         ) : (
           <>
-            <NewsComponent newsType="Top Stories" newsData={topStory} />
+            <NewsComponent newsType="Top Stories\" newsData={topStory} />
             
             <div className="flex justify-center pb-12">
               {loadMore ? (

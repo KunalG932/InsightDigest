@@ -2,7 +2,7 @@
 import { getCategories } from "@/lib/fetchNews";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Menu, X, Download } from "lucide-react";
+import { Menu, X, Download, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
@@ -11,6 +11,7 @@ export default function Navbar() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [isInstallable, setIsInstallable] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -83,15 +84,25 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4">
             {categories?.slice(0, 6).map((category) => (
-              <Link
+              <motion.div
                 key={category}
-                href={`/${category.toLowerCase()}`}
-                className="px-3 py-2 rounded-md text-sm font-medium text-slate-300 hover:text-cyan-400 
-                         hover:bg-slate-800/50 transition-all hover:scale-105 focus:outline-none 
-                         focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                {category}
-              </Link>
+                <Link
+                  href={`/${category.toLowerCase()}`}
+                  className={`px-3 py-2 rounded-md text-sm font-medium transition-all duration-300
+                           focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 
+                           focus:ring-offset-slate-950 ${
+                             activeCategory === category
+                               ? 'text-cyan-400 bg-slate-800/50'
+                               : 'text-slate-300 hover:text-cyan-400 hover:bg-slate-800/50'
+                           }`}
+                  onClick={() => setActiveCategory(category)}
+                >
+                  {category}
+                </Link>
+              </motion.div>
             ))}
             {isInstallable && (
               <motion.button
@@ -103,7 +114,7 @@ export default function Navbar() {
                 className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 
                          text-white font-medium hover:from-cyan-600 hover:to-blue-600 transition-all 
                          focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 
-                         focus:ring-offset-slate-950"
+                         focus:ring-offset-slate-950 shadow-lg hover:shadow-cyan-500/20"
               >
                 <Download size={18} />
                 Install App
@@ -152,25 +163,53 @@ export default function Navbar() {
             className="md:hidden bg-slate-900/95 backdrop-blur-lg overflow-hidden"
           >
             <div className="px-2 pt-2 pb-3 space-y-1">
-              {categories?.slice(0, 8).map((category) => (
+              {categories?.slice(0, 8).map((category, index) => (
                 <motion.div
                   key={category}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.2 }}
+                  transition={{ duration: 0.2, delay: index * 0.05 }}
                 >
                   <Link
                     href={`/${category.toLowerCase()}`}
-                    onClick={() => setIsOpen(false)}
-                    className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 
-                             hover:text-cyan-400 hover:bg-slate-800/50 transition-all 
+                    onClick={() => {
+                      setIsOpen(false);
+                      setActiveCategory(category);
+                    }}
+                    className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300
                              focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 
-                             focus:ring-offset-slate-950"
+                             focus:ring-offset-slate-950 ${
+                               activeCategory === category
+                                 ? 'text-cyan-400 bg-slate-800/50'
+                                 : 'text-slate-300 hover:text-cyan-400 hover:bg-slate-800/50'
+                             }`}
                   >
                     {category}
                   </Link>
                 </motion.div>
               ))}
+              {isInstallable && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.2, delay: 0.4 }}
+                  className="pt-2"
+                >
+                  <button
+                    onClick={() => {
+                      handleInstallClick();
+                      setIsOpen(false);
+                    }}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-md 
+                             bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-medium 
+                             hover:from-cyan-600 hover:to-blue-600 transition-all focus:outline-none 
+                             focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-950"
+                  >
+                    <Download size={20} />
+                    Install App
+                  </button>
+                </motion.div>
+              )}
             </div>
           </motion.div>
         )}
